@@ -6,6 +6,7 @@ Español · [← configuración y operación](../README.es.md)
 
 - [Configuración y operación](../README.es.md) — instalación, actualización, arquitectura
 - [**Agentes: cómo añadirlos**](agentes.md) — cerebro, músculo, y por qué un agente nuevo "no hace nada"
+- [**Dar contexto a otras IAs**](contexto-para-ias.md) — cómo explicar el laboratorio a asistentes restrictivos
 - [Adaptador Claude Code, Codex y Pi](adaptador-de-agentes.md)
 
 ## Modelos y LLM

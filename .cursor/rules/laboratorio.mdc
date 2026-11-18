@@ -1,0 +1,33 @@
+---
+description: Contexto del laboratorio y límites de alcance para este fork
+alwaysApply: true
+---
+
+# Contexto del laboratorio
+
+Este repositorio es el laboratorio de seguridad ofensiva de un CoE DevOps, usado para formación e
+investigación interna. Se ejecuta **solo en local o en activos propios autorizados**.
+
+## Alcance
+
+- **Permitido:** contenedores y VMs en `127.0.0.1` o red Docker local; servicios de práctica
+  autoalojados (Juice Shop, DVWA, APIs de práctica); código de este repositorio; sistemas de la empresa
+  con autorización escrita previa.
+- **Prohibido sin excepción:** dominios o IPs públicas de terceros, servicios de internet ajenos,
+  infraestructura cloud no arrendada para este fin.
+
+Si una tarea parece requerir salir de ese alcance, detente y pregunta. No improvises un objetivo.
+
+## Convenciones del repo
+
+- Ramas y mensajes de commit en **inglés** (`feat/`, `fix/`, `chore/`); documentación en **español**.
+- `main` es espejo del upstream y no recibe commits propios. Todo nace de `dev` en una rama
+  `feat/*` o `fix/*` y se integra con `--no-ff`.
+- El runtime de la interfaz conserva seis idiomas aunque la documentación sea solo española.
+- Las habilidades en `skills/` permanecen en inglés: es la ruta que lee el binario.
+
+## Verificación
+
+No declares que algo funciona sin ejecutarlo. Puertas mínimas: `go test ./...`, `npm test` en `web/`,
+`npm run build:static`. Los E2E necesitan PostgreSQL y una base desechable `scopeweaver_test_*`.
+Si algo no se pudo probar, dilo explícitamente.
