@@ -1,30 +1,29 @@
 # Contributing to ScopeWeaver
 
-English · [한국어](CONTRIBUTING.ko.md) · [简体中文](CONTRIBUTING.zh-Hans.md) · [繁體中文](CONTRIBUTING.zh-Hant.md) · [日本語](CONTRIBUTING.ja.md) · [Español](CONTRIBUTING.es.md)
+English · [Español](CONTRIBUTING.es.md)
 
 Contributions are welcome: bug fixes, upstream ARTEX backports, dependency upgrades, documentation,
 and tests.
 
 ## Before you start
 
-- Read the [usage restrictions](README.md#license-and-disclaimer). Contributions must not add
+- Read the [usage restrictions](README.es.md#licencia-y-exención-de-responsabilidad). Contributions must not add
   features that target real online systems or weaken those restrictions.
 - For larger changes, open an issue first so we can agree on the approach.
 - Keep each pull request focused on one topic. Smaller PRs are reviewed faster.
 
 ## Requirements for a pull request
 
-- **Complete shipped languages and corresponding documentation.** User-facing text and maintained user/contributor guides need English, Korean, Simplified Chinese (`zh-Hans`), Traditional Chinese (`zh-Hant`), Japanese (`ja`) and Spanish (`es`):
-  - server messages: keep `locale.Register(key, en, ko)` compatible and include additional shipped languages through `locale.RegisterAll` and the language-keyed resources in `locale/`
-  - web UI: all current English keys in the EN/KO tables and `messages/{zh-hans,zh-hant,ja,es}.ts`
-  - documentation: `README.md`, `CONTRIBUTING.md` and maintained guides with corresponding `ko`, `zh-Hans`, `zh-Hant`, `ja` and `es` editions; preserve executable English skill entries
+- **Complete shipped languages and corresponding documentation.** This fork ships Spanish only. User-facing text and maintained user/contributor guides need Spanish (`es`), and executable skill entries stay in English because the binary reads them from `skills/`:
+  - server messages: keep `locale.Register(key, en, ko)` compatible; language-keyed resources in `locale/` that are neither Spanish nor English stay if the runtime still registers them
+  - web UI: all current English keys in the EN/KO tables and `messages/es.ts`
+  - documentation: `README.es.md`, `CONTRIBUTING.es.md` and the maintained guides under `docs/` in Spanish; preserve executable English skill entries
 - **Tests for changed behavior.** Add or update tests that would fail without your change. Do not
   disable, skip, or loosen existing checks to make them pass.
 - **Disposable databases only.** Tests that write to PostgreSQL must use a fresh database named
   `scopeweaver_test_*` (or `scopeweaver_adapter_*` for the agent adapter E2E test).
 - **Credit upstream work.** For ARTEX backports, add `Upstream-commit: mhtsec/ARTEX@<sha>` and a
-  `Co-authored-by:` trailer for the original author, and update `docs/PROVENANCE.md` and
-  `docs/ko/PROVENANCE.md`.
+  `Co-authored-by:` trailer for the original author, and update `docs/procedencia.md`.
 - **License.** Contributions are accepted under the repository's [AGPL-3.0](LICENSE) license.
 
 ## Adding or changing a locale
@@ -48,7 +47,7 @@ These match the CI jobs in [.github/workflows/ci.yml](.github/workflows/ci.yml):
 
 # backend database-backed suites (db, server, agent): against a throwaway database
 # that is created and dropped for you. They require ARTEX_TEST_DSN and skip (never
-# fall back to the live DSN) without it — see docs/VERIFICATION.md.
+# fall back to the live DSN) without it — see docs/verificacion.md.
 make test-db
 
 # backend: every Go package (set ARTEX_TEST_DSN to a disposable scopeweaver_test_* database)

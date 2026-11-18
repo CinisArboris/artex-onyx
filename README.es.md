@@ -4,7 +4,7 @@
 
 Sistema autónomo multiagente de pruebas de penetración con LLM (backend Go + frontend Next.js)
 
-[English](README.md) · [한국어](README.ko.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · Español
+Español · [← guía de contribución](CONTRIBUTING.md)
 
 </div>
 
@@ -13,9 +13,9 @@ Sistema autónomo multiagente de pruebas de penetración con LLM (backend Go + f
 > **Sobre este proyecto.** ScopeWeaver es una obra derivada de [Autumn-27/ARTEX](https://github.com/Autumn-27/ARTEX),
 > con nueva marca y traducción al inglés y coreano. Se construyó a partir del commit original `160fe13`.
 
-Fecha de modificación: **2026-10-02**. Consulta [procedencia y cambios](docs/es/PROVENANCE.md); no es una etiqueta de versión.
+Fecha de modificación: **2026-10-02**. Consulta [procedencia y cambios](docs/procedencia.md); no es una etiqueta de versión.
 
-[Estado de verificación y limitaciones conocidas](docs/es/VERIFICATION.md).
+[Estado de verificación y limitaciones conocidas](docs/verificacion.md).
 
 > El código y la arquitectura proceden de ARTEX. Esta obra derivada independiente cambia el
 > nombre del producto, la interfaz y mensajes en inglés/coreano, la documentación y los destinos de distribución. Consulta [Procedencia y cambios](#procedencia-y-cambios)
@@ -35,7 +35,7 @@ El inglés es el idioma predeterminado. Selecciona inglés, coreano, chino simpl
 con una región tradicional. `zh-TW`, `zh-HK` y `zh-MO` seleccionan chino tradicional;
 las etiquetas Hant explícitas conservan su escritura incluso con una región simplificada. Las etiquetas regionales de japonés y español
 se resuelven a `ja` y `es`. Los idiomas no compatibles pasan a la siguiente preferencia. Consulta la
-[guía de idiomas para colaboradores](docs/es/i18n.md). El valor predeterminado persistente del servidor es
+[guía de idiomas para colaboradores](docs/idiomas.md). El valor predeterminado persistente del servidor es
 `language` en los ajustes del sistema; `SCOPEWEAVER_LANGUAGE` (o `ARTEX_LANGUAGE`) proporciona la alternativa del
 entorno. `LANG` del sistema operativo no selecciona el idioma de la aplicación.
 
@@ -43,8 +43,8 @@ Las solicitudes priorizan `lang`, después las preferencias compatibles de `Acce
 y finalmente el valor del servidor. Las tareas nuevas creadas por HTTP conservan su idioma entre colas y
 reinicios; las antiguas sin idioma guardado usan el valor del servidor. Las indicaciones e instrucciones de salida de agentes integrados
 usan el idioma de ejecución; las plantillas editadas por el usuario y las pruebas almacenadas permanecen intactas.
-Las etiquetas de informes/CSV/ZIP usan el idioma de la solicitud de exportación. La [documentación completa](docs/es/README.md) y
-las [referencias en coreano](docs/ko/README.md) incluyen indicaciones de habilidades incluidas.
+Las etiquetas de informes/CSV/ZIP usan el idioma de la solicitud de exportación. La [documentación completa](docs/indice.md) y
+Las [referencias de habilidades en español](docs/indice.md) incluyen indicaciones de habilidades incluidas; la entrada ejecutable sigue en inglés en [`skills/`](skills).
 
 Las conversaciones independientes de pruebas de penetración guardan hallazgos confirmados directamente en la página Hallazgos
 bajo el grupo sin tarea asignada. Cada conversación conserva su propio historial de hallazgos entre
@@ -54,8 +54,7 @@ y Comprobación de hallazgos, se usan los valores predeterminados del rol; los f
 ## Capturas de pantalla
 
 Estas capturas muestran la interfaz inglesa de ScopeWeaver con los datos ficticios de demostración incluidos.
-No representan escaneos de objetivos reales. Consulta las [capturas en coreano](README.ko.md#스크린샷)
-y la [vista móvil](screenshots/en/mobile.png).
+No representan escaneos de objetivos reales. Consulta la [vista móvil](screenshots/en/mobile.png).
 
 | Panel | Tareas |
 | :---: | :---: |
@@ -123,16 +122,16 @@ interrumpido y concilia archivos de transcripción sin publicar antes de reanuda
 El formulario **LLM → Nuevo** incluye plantillas de GLM-5.3 para la API general de Z.ai y una
 referencia Coding Plan etiquetada por separado. Añade tu clave API; elegir plantilla no guarda,
 activa ni contacta al proveedor. Coding Plan está restringido a herramientas oficialmente compatibles y
-ScopeWeaver no figura entre ellas. Consulta [configuración de proveedores y límites de compatibilidad](docs/es/llm-providers.md).
-Para reducir tokens de nube, consulta [Controlar el uso de tokens](docs/es/llm-providers.md#controlar-el-uso-de-tokens).
+ScopeWeaver no figura entre ellas. Consulta [configuración de proveedores y límites de compatibilidad](docs/proveedores-llm.md).
+Para reducir tokens de nube, consulta [Controlar el uso de tokens](docs/proveedores/tokens-y-costes.md).
 
-El **puente OpenCode SDK** opcional admite `native` CLI/cliente **2.3.0** (predeterminado) y `legacy` SDK/CLI **1.19.4**, con token independiente y `providerID/modelID`. Norma de ScopeWeaver conserva herramientas y aprobaciones. El modo heredado mantiene JSON seguro, permite normalizar espacios/escapes, no conserva bytes originales y rechaza enteros inseguros. Ambos modos carecen de soporte Windows; las pruebas previas cubrieron macOS arm64 y el resultado CI alojado de Linux sigue pendiente. El modo LLM solo local lo rechaza porque el proveedor puede ser nube. Consulta [inicio, límites y preparación de degradación SDK](docs/es/llm-providers.md#opencode-sdk-bridge): los binarios anteriores no arrancan mientras existan perfiles SDK.
+El **puente OpenCode SDK** opcional admite `native` CLI/cliente **2.3.0** (predeterminado) y `legacy` SDK/CLI **1.19.4**, con token independiente y `providerID/modelID`. Norma de ScopeWeaver conserva herramientas y aprobaciones. El modo heredado mantiene JSON seguro, permite normalizar espacios/escapes, no conserva bytes originales y rechaza enteros inseguros. Ambos modos carecen de soporte Windows; las pruebas previas cubrieron macOS arm64 y el resultado CI alojado de Linux sigue pendiente. El modo LLM solo local lo rechaza porque el proveedor puede ser nube. Consulta [inicio, límites y preparación de degradación SDK](docs/proveedores/puente-opencode.md): los binarios anteriores no arrancan mientras existan perfiles SDK.
 
 Los perfiles opcionales de **Ollama nativo** funcionan sin clave API. Tres plantillas cubren Ollama en el mismo
 equipo, en el host desde Docker y el servicio opcional `docker compose --profile local-llm`. Elegir una consulta los modelos instalados y rellena uno, dando preferencia a la compatibilidad con herramientas declarada;
 no descarga ni ejecuta modelos. Envían un contexto de 32K (`num_ctx` 32,768), una solicitud a la vez y keep-alive de 30 minutos. El ajuste opcional
 **red LLM exclusivamente local** (desactivado por defecto) permite solo loopback y CIDR de inferencia de confianza explícitos; las direcciones LAN y Docker requieren ahora una entrada en la lista de permitidos. También bloquea toda búsqueda web de agentes y comprobación/descarga de actualizaciones, conservando el estado de versión local y la reversión. Las herramientas de objetivos conservan acceso de red; Ollama del host/remoto debe usar aparte `OLLAMA_NO_CLOUD=1`. Fuera del modo estricto, siguen funcionando formatos de nube, URL personalizadas y proxies. Las solicitudes nativas dan el siguiente hueco disponible a llamadas en cola del juez/agente principal/preguntas paralelas, con valor predeterminado del juez nativo de 90 segundos/preguntar y protecciones de contexto limitadas. Consulta
-[Ollama nativo](docs/es/llm-providers.md#ollama-nativo-inferencia-local).
+[Ollama nativo](docs/proveedores/inferencia-local.md).
 
 > Requiere una base de datos **PostgreSQL**. La exploración necesita un **LLM** configurado
 > (`ANTHROPIC_API_KEY` u `OPENAI_API_KEY`, un perfil Ollama sin clave o configúralo en la interfaz).
@@ -188,7 +187,7 @@ suelen abrir el flujo de eventos con `GET /sse` y reciben después solicitudes J
 > `scopeweaver-<version>-<os>-<arch>.zip`, que se descomprime en `scopeweaver` + `start.sh`
 > (`start.bat` en Windows) + `skills/` + `config.example.json`:
 
-El archivo también incluye `adapters/agent/`; consulta las [instrucciones de configuración del agente](docs/es/agent-adapter.md).
+El archivo también incluye `adapters/agent/`; consulta las [instrucciones de configuración del agente](docs/adaptador-de-agentes.md).
 
 ```bash
 cp config.example.json config.json   # fill in the database connection
@@ -398,7 +397,7 @@ CGO_ENABLED=0 go build -tags embedui -o scopeweaver ./cmd/artex
 ### Integración con agentes de programación
 
 Claude Code, Codex y Pi pueden crear tareas y consultar progreso, cobertura y hallazgos mediante el
-[adaptador de agentes](docs/es/agent-adapter.md). Claude Code/Codex usan MCP stdio local; Pi usa una extensión
+[adaptador de agentes](docs/adaptador-de-agentes.md). Claude Code/Codex usan MCP stdio local; Pi usa una extensión
 nativa. Las lecturas están activadas por defecto; la creación y pausa/reanudación de tareas se activan explícitamente
 mediante configuración. El adaptador usa la API autenticada existente y conserva los agentes internos
 y la configuración de modelos de ScopeWeaver.
@@ -422,7 +421,7 @@ y la configuración de modelos de ScopeWeaver.
 LLM» de la interfaz. Opcionales: `ARTEX_LLM_PROVIDER` / `ARTEX_LLM_MODEL` / `ARTEX_LLM_BASE_URL` /
 `ARTEX_LLM_PROXY`. Cada alias `SCOPEWEAVER_LLM_*` prevalece sobre su equivalente `ARTEX_LLM_*`; Ollama
 también acepta los sufijos `CONTEXT_WINDOW_K`, `MAX_CONCURRENT`, `KEEP_ALIVE` y `MAX_TOKENS`
-([lista completa](docs/es/llm-providers.md#entorno-y-configuración)).
+([lista completa](docs/proveedores/red-y-variables.md)).
 
 **Concurrencia**: el número de agentes de trabajo por tarea se configura en «Configuración del sistema» (3 por defecto).
 
@@ -735,46 +734,3 @@ sin cambios y con atribución al original.
 
 Este proyecto tiene licencia **GNU Affero General Public License v3.0 (AGPL-3.0)**. Los términos completos
 están en el archivo [LICENSE](LICENSE) de la raíz del repositorio.
-
-Esto significa que cualquiera puede usar, modificar y distribuir libremente el proyecto, pero **las obras derivadas también deben
-publicarse como código abierto bajo AGPL-3.0**; en particular, **si modificas este proyecto y lo ofreces a
-usuarios por una red (por ejemplo, como servicio alojado), debes proporcionar también a esos usuarios el
-código fuente correspondiente completo.**
-
-> ⚠️ **Importante**: una licencia de código abierto no restringe por sí misma cómo se puede usar el software.
-> Las «restricciones de uso» y la «exención de responsabilidad» siguientes son condiciones adicionales y una declaración seria
-> de los autores a los usuarios. Respétalas.
-
-**ARTEX está destinado solo al estudio personal, investigación del código fuente y validación técnica local. No
-debe usarse para lanzar pruebas reales contra ningún sistema o sitio web en línea.**
-
-### Uso permitido
-
-- Solo para **leer, estudiar e investigar el código fuente de este proyecto** y validar sus
-  principios técnicos en un **entorno aislado local**.
-- Adecuado para estudio personal, investigación académica, revisión de código y otros usos no ofensivos.
-
-### Prohibiciones
-
-- **No uses esta herramienta para escanear, sondear, explotar ni atacar ningún sitio web, servicio en línea ni
-  sistema en red** (tengas o no autorización y sea o no tuyo el activo).
-- No uses esta herramienta para pruebas de penetración reales, ejercicios rojo/azul ni entornos de producción.
-- No uses esta herramienta para intrusión ilegal, robo de datos, extorsión, denegación de servicio ni ninguna
-  actividad destructiva o delictiva.
-- No uses esta herramienta para nada que infrinja las leyes y normas de tu país o región.
-
-### Responsabilidad de cumplimiento
-
-Los usuarios deben cumplir todas las leyes y normas sobre ciberseguridad, protección de datos y delitos informáticos
-de su país o región (en China continental, incluidas entre otras la Ley de Ciberseguridad,
-la Ley de Seguridad de Datos, la Ley de Protección de Información Personal y las interpretaciones judiciales
-relacionadas). **Toda responsabilidad legal y consecuencias derivadas del uso de esta herramienta corresponden al
-usuario.**
-
-### Exención de responsabilidad
-
-Este proyecto se proporciona «TAL CUAL», sin garantías expresas ni implícitas. Los autores y
-colaboradores no responden por pérdidas directas o indirectas, pérdida de datos, daños al sistema ni litigios
-derivados del uso de esta herramienta, tanto si fue adecuado como si no. **Al descargar,
-instalar o usar este proyecto, confirmas que has leído, comprendido y aceptado todos los
-términos anteriores.**

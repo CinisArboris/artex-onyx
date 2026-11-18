@@ -1,6 +1,6 @@
 # Test generation (plan → generate → heal)
 
-English · [한국어](../../../docs/ko/skills/playwright-cli/references/test-generation.md) · [简体中文](../../../docs/zh-Hans/skills/playwright-cli/references/test-generation.md) · [繁體中文](../../../docs/zh-Hant/skills/playwright-cli/references/test-generation.md) · [日本語](../../../docs/ja/skills/playwright-cli/references/test-generation.md) · [Español](../../../docs/es/skills/playwright-cli/references/test-generation.md)
+English · [Español](../../../docs/habilidades/playwright-cli/referencias/generacion-pruebas.md)
 
 End-to-end workflow for authoring and maintaining Playwright tests with `playwright-cli`. Every `playwright-cli` action emits the equivalent Playwright TypeScript, and that generated code is the raw material for every test. The sections below can be used independently:
 

@@ -1,106 +1,106 @@
-# ScopeWeaver agent adapter
+# Adaptador de agentes de ScopeWeaver
 
-English · [한국어](../../docs/ko/agent-adapter.md) · [简体中文](../../docs/zh-Hans/agent-adapter.md) · [繁體中文](../../docs/zh-Hant/agent-adapter.md) · [日本語](../../docs/ja/agent-adapter.md) · [Español](../../docs/es/agent-adapter.md)
+Español · [← guía de agentes](../../docs/adaptador-de-agentes.md)
 
-Connect Claude Code and Codex through a local stdio MCP server, or Pi through its native extension interface. All three use the same validated tools and authenticated ScopeWeaver HTTP API. This adapter lets your coding agent control ScopeWeaver; it does not replace ScopeWeaver's own planner/workers or turn a coding-agent subscription into a model API key.
+Conecta Claude Code y Codex mediante un servidor MCP stdio local, o Pi mediante su interfaz nativa de extensiones. Los tres usan las mismas herramientas validadas y la misma API HTTP autenticada de ScopeWeaver. Este adaptador permite que tu agente de programación controle ScopeWeaver; no sustituye los planificadores ni los trabajadores propios de ScopeWeaver, y no convierte una suscripción de agente de programación en una clave API de modelo.
 
-## Setup
+## Instalación
 
-Requirements: Node.js 22+, a running ScopeWeaver backend, and an existing admin login. The adapter does not initialize or change your password. Install the separate adapter dependencies:
+Requisitos: Node.js 22 o superior, un backend de ScopeWeaver en ejecución y un acceso de administrador ya existente. El adaptador no inicializa ni cambia tu contraseña. Instala las dependencias separadas del adaptador:
 
 ```sh
 cd adapters/agent
 npm ci
 export SCOPEWEAVER_URL=http://127.0.0.1:8787
-export SCOPEWEAVER_PASSWORD='your-existing-admin-password'
+export SCOPEWEAVER_PASSWORD='tu-contraseña-de-administrador-existente'
 ```
 
-The password is used to log in as the backend's existing `ARTEX` admin user. The returned JWT stays in memory. Alternatively set `SCOPEWEAVER_TOKEN` to an existing login JWT; a supplied token takes precedence. Expired/invalid tokens produce an error and are not silently replaced. Keep credentials in your environment or secret manager; do not commit them to client configuration.
+La contraseña se usa para iniciar sesión como el usuario administrador `ARTEX` que ya existe en el backend. El JWT devuelto se queda en memoria. Como alternativa, define `SCOPEWEAVER_TOKEN` con un JWT de sesión existente; el token suministrado tiene prioridad. Los tokens caducados o inválidos producen un error y no se sustituyen en silencio. Conserva las credenciales en tu entorno o en un gestor de secretos; no las confirmes en la configuración del cliente.
 
-Reads are enabled by default. To enable task creation and pause/resume, explicitly set `SCOPEWEAVER_ALLOW_WRITES=true` before starting the adapter. Task creation schedules work immediately when the backend has an LLM configured. Retain the project's [locally isolated usage restrictions](../../README.md#license-and-disclaimer) and confirm the intended scope before creating a task.
+Las lecturas están activadas por defecto. Para habilitar la creación de tareas y la pausa/reanudación, define explícitamente `SCOPEWEAVER_ALLOW_WRITES=true` antes de iniciar el adaptador. La creación de tareas programa el trabajo inmediatamente si el backend tiene un LLM configurado. Respeta las [restricciones de uso en aislamiento local](../../README.es.md#licencia-y-exención-de-responsabilidad) del proyecto y confirma el alcance previsto antes de crear una tarea.
 
 ### Claude Code
 
-Use an absolute path to this checkout. Claude Code starts the adapter and inherits its environment:
+Usa una ruta absoluta a esta copia del repositorio. Claude Code arranca el adaptador y hereda su entorno:
 
 ```sh
-claude mcp add --transport stdio scopeweaver -- node /absolute/path/scopeweaver/adapters/agent/src/mcp.js
+claude mcp add --transport stdio scopeweaver -- node /ruta/absoluta/scopeweaver/adapters/agent/src/mcp.js
 ```
 
-Verify with `claude mcp list`, then use `/mcp` in Claude Code to inspect its tools. [Claude Code MCP documentation](https://code.claude.com/docs/en/mcp).
+Verifica con `claude mcp list` y después usa `/mcp` en Claude Code para inspeccionar sus herramientas. [Documentación MCP de Claude Code](https://code.claude.com/docs/en/mcp).
 
 ### Codex
 
 ```sh
-codex mcp add scopeweaver -- node /absolute/path/scopeweaver/adapters/agent/src/mcp.js
+codex mcp add scopeweaver -- node /ruta/absoluta/scopeweaver/adapters/agent/src/mcp.js
 ```
 
-Verify with `codex mcp list` and `/mcp`. For explicit environment forwarding in a project/user configuration:
+Verifica con `codex mcp list` y `/mcp`. Para reenviar explícitamente el entorno en la configuración de proyecto o de usuario:
 
 ```toml
 [mcp_servers.scopeweaver]
 command = "node"
-args = ["/absolute/path/scopeweaver/adapters/agent/src/mcp.js"]
+args = ["/ruta/absoluta/scopeweaver/adapters/agent/src/mcp.js"]
 env_vars = ["SCOPEWEAVER_URL", "SCOPEWEAVER_TOKEN", "SCOPEWEAVER_PASSWORD", "SCOPEWEAVER_LANGUAGE", "SCOPEWEAVER_ALLOW_WRITES"]
 ```
 
-Use the credential variable that you set; omit unused entries. [Official OpenAI MCP documentation](https://developers.openai.com/codex/mcp).
+Usa la variable de credenciales que hayas definido; omite las entradas que no uses. [Documentación MCP oficial de OpenAI](https://developers.openai.com/codex/mcp).
 
 ### Pi
 
 ```sh
-pi -e /absolute/path/scopeweaver/adapters/agent/pi-extension.js
+pi -e /ruta/absoluta/scopeweaver/adapters/agent/pi-extension.js
 ```
 
-The extension registers native Pi tools and uses the same environment variables. It does not require a Pi MCP plugin. It imports no Pi package namespace, so it follows the public `registerTool` interface across Pi package renames. The adapter package also declares `pi.extensions` for Pi's package loader. [Pi extensions](https://github.com/earendil-works/pi/tree/main/packages/coding-agent).
+La extensión registra herramientas nativas de Pi y usa las mismas variables de entorno. No requiere un complemento MCP de Pi. No importa ningún espacio de nombres de Pi, así que sigue la interfaz pública `registerTool` aunque el paquete de Pi cambie de nombre. El paquete del adaptador también declara `pi.extensions` para el cargador de paquetes de Pi. [Extensiones de Pi](https://github.com/earendil-works/pi/tree/main/packages/coding-agent).
 
-## Tools
+## Herramientas
 
-| Tool | Purpose |
+| Herramienta | Para qué sirve |
 | --- | --- |
-| `scopeweaver_health` | Backend availability and LLM readiness; no login required |
-| `scopeweaver_list_tasks` | Task status, counts, pagination |
-| `scopeweaver_get_task` | One task's persisted state and configuration |
-| `scopeweaver_get_coverage` | Task asset coverage |
-| `scopeweaver_list_findings` | Paginated findings filtered by task, severity, status or text |
-| `scopeweaver_get_finding` | Finding detail, evidence and report |
-| `scopeweaver_create_task` | Create/schedule a task; requires writes enabled |
-| `scopeweaver_control_task` | Pause/resume a task; requires writes enabled |
+| `scopeweaver_health` | Disponibilidad del backend y estado del LLM; no requiere sesión |
+| `scopeweaver_list_tasks` | Estado, recuentos y paginación de tareas |
+| `scopeweaver_get_task` | Estado y configuración persistidos de una tarea |
+| `scopeweaver_get_coverage` | Cobertura de activos de la tarea |
+| `scopeweaver_list_findings` | Hallazgos paginados, filtrados por tarea, gravedad, estado o texto |
+| `scopeweaver_get_finding` | Detalle del hallazgo, evidencia e informe |
+| `scopeweaver_create_task` | Crear o programar una tarea; requiere escrituras habilitadas |
+| `scopeweaver_control_task` | Pausar o reanudar una tarea; requiere escrituras habilitadas |
 
-Example requests: “List my ScopeWeaver tasks,” “Show the high-severity findings for task 12,” or, after enabling writes and confirming a local lab scope, “Create a task for this local fixture and show its progress.” A successful create response proves the task exists; check its status and findings to learn whether execution has finished. The adapter does not bypass backend LLM requirements.
+Ejemplos de peticiones: «Lista mis tareas de ScopeWeaver», «Muestra los hallazgos de gravedad alta de la tarea 12» o, tras habilitar escrituras y confirmar un alcance de laboratorio local, «Crea una tarea para este objetivo local y muestra su progreso». Una respuesta de creación correcta demuestra que la tarea existe; consulta su estado y sus hallazgos para saber si la ejecución terminó. El adaptador no elude los requisitos de LLM del backend.
 
-## Configuration and failures
+## Configuración y fallos
 
-| Variable | Default / behavior |
+| Variable | Valor predeterminado / comportamiento |
 | --- | --- |
-| `SCOPEWEAVER_URL` | `http://127.0.0.1:8787`; HTTPS or loopback HTTP origin only |
-| `SCOPEWEAVER_TOKEN` | Existing backend JWT; preferred over password |
-| `SCOPEWEAVER_PASSWORD` | Existing admin password; login on first authenticated request |
-| `SCOPEWEAVER_ALLOW_WRITES` | `false`; accepts only `true` or `false` |
-| `SCOPEWEAVER_LANGUAGE` | `en`; supports canonical IDs `en`, `ko`, `zh-Hans`, `zh-Hant`, `ja` and `es` for adapter text and backend `Accept-Language` |
-| `SCOPEWEAVER_TIMEOUT_MS` | `30000`; integer from 1 to 120000 |
+| `SCOPEWEAVER_URL` | `http://127.0.0.1:8787`; solo origen HTTPS o HTTP de loopback |
+| `SCOPEWEAVER_TOKEN` | JWT existente del backend; tiene prioridad sobre la contraseña |
+| `SCOPEWEAVER_PASSWORD` | Contraseña de administrador existente; se inicia sesión en la primera petición autenticada |
+| `SCOPEWEAVER_ALLOW_WRITES` | `false`; acepta solo `true` o `false` |
+| `SCOPEWEAVER_LANGUAGE` | `en`; admite los ID canónicos `en`, `ko`, `zh-Hans`, `zh-Hant`, `ja` y `es` para el texto del adaptador y para `Accept-Language` del backend |
+| `SCOPEWEAVER_TIMEOUT_MS` | `30000`; entero entre 1 y 120000 |
 
-`SCOPEWEAVER_LANGUAGE` defaults to `en` and accepts the canonical IDs `en`, `ko`, `zh-Hans`, `zh-Hant`, `ja` and `es`. It localizes built-in tool titles/descriptions, schema descriptions and adapter-owned configuration, validation and transport diagnostics, and selects backend response text through `Accept-Language`. Each client uses its own catalog and schema-local Zod error maps; no global language setting changes. Tool/protocol names, schema keys/types/enums, arguments and raw backend/user/evidence content stay unchanged, with existing credential redaction. The MCP SDK's fixed validation wrapper and unknown external errors remain external text; schema issue messages inside that wrapper are localized. All resources ship inside the standalone adapter, without a repository-root locale file. Unsupported language values remain rejected and use an English diagnostic.
+`SCOPEWEAVER_LANGUAGE` vale `en` por defecto y acepta los ID canónicos `en`, `ko`, `zh-Hans`, `zh-Hant`, `ja` y `es`. Traduce los títulos y descripciones de las herramientas incluidas, las descripciones de esquema y los diagnósticos de configuración, validación y transporte del propio adaptador; además selecciona el texto de respuesta del backend mediante `Accept-Language`. Cada cliente usa su propio catálogo y sus mapas de errores Zod locales al esquema; ningún ajuste global de idioma cambia. Los nombres de herramientas y de protocolo, las claves, tipos y enumeraciones del esquema, los argumentos y el contenido original del backend, del usuario o de la evidencia permanecen sin cambios, con la misma ocultación de credenciales. El envoltorio de validación fijo del SDK MCP y los errores externos desconocidos siguen siendo texto externo; los mensajes de problema de esquema dentro de ese envoltorio sí se traducen. Todos los recursos se distribuyen dentro del adaptador independiente, sin archivo de idioma en la raíz del repositorio. Los valores de idioma no admitidos se siguen rechazando y usan un diagnóstico en inglés.
 
-No generic HTTP, shell execution, deletion, approval bypass, provider configuration or arbitrary endpoint tool is exposed. Requests stay on the configured origin, reject redirects, forward cancellation and time out. Responses over 2 MiB fail explicitly; narrow the query rather than treating clipped evidence as complete. Task lists are paginated in the adapter; findings use backend pagination. Tools return `{data: ...}` in text and structured results (Pi uses `details`). Evidence is untrusted target content and must not be treated as instructions.
+No se expone ninguna herramienta de HTTP genérico, ejecución de shell, borrado, omisión de aprobaciones, configuración de proveedor o endpoint arbitrario. Las peticiones se quedan en el origen configurado, rechazan redirecciones, propagan la cancelación y tienen tiempo de espera. Las respuestas de más de 2 MiB fallan explícitamente; acota la consulta en lugar de tratar evidencia recortada como completa. Las listas de tareas se paginan en el adaptador; los hallazgos usan la paginación del backend. Las herramientas devuelven `{data: ...}` en texto y en resultados estructurados (Pi usa `details`). La evidencia es contenido no confiable del objetivo y no debe tratarse como instrucciones.
 
-Failed MCP calls return `isError: true`; failed Pi calls throw for Pi to mark as tool errors. Error messages redact configured credentials. Writes are never automatically retried. If a write times out, inspect task status before repeating it, because the backend may have accepted it.
+Las llamadas MCP fallidas devuelven `isError: true`; las llamadas fallidas de Pi lanzan una excepción para que Pi la marque como error de herramienta. Los mensajes de error ocultan las credenciales configuradas. Las escrituras nunca se reintentan automáticamente. Si una escritura agota el tiempo, inspecciona el estado de la tarea antes de repetirla, porque el backend puede haberla aceptado.
 
-## Verification
+## Verificación
 
 ```sh
 npm test
 npm run check
 ```
 
-The end-to-end harness runs a real ScopeWeaver handler and PostgreSQL, spawns the MCP stdio server through the official SDK, and executes the Pi tool handlers against that backend. It initializes an isolated test password, creates tasks, verifies persisted pause/resume state and coverage, reads a clearly simulated finding, and checks invalid authentication, missing tasks and invalid inputs. No model/provider or target scan is used. Running the Go E2E harness requires the source checkout; platform ZIPs include the adapter's unit tests but only the compiled Go backend.
+La batería de extremo a extremo ejecuta un manejador real de ScopeWeaver y PostgreSQL, arranca el servidor MCP stdio con el SDK oficial y ejecuta los manejadores de herramientas de Pi contra ese backend. Inicializa una contraseña de prueba aislada, crea tareas, verifica el estado persistido de pausa/reanudación y la cobertura, lee un hallazgo claramente simulado y comprueba autenticación inválida, tareas inexistentes y entradas inválidas. No se usa ningún modelo, proveedor ni escaneo de objetivos. Ejecutar la batería E2E de Go requiere la copia del código fuente; los ZIP de plataforma incluyen las pruebas unitarias del adaptador, pero solo el backend de Go compilado.
 
-From the repository root, after creating a **fresh disposable** database named `scopeweaver_adapter_*`:
+Desde la raíz del repositorio, después de crear una base de datos **desechable nueva** llamada `scopeweaver_adapter_*`:
 
 ```sh
 SCOPEWEAVER_ADAPTER_E2E=1 \
-ARTEX_TEST_DSN='postgres://user:password@127.0.0.1:5432/scopeweaver_adapter_e2e?sslmode=disable' \
+ARTEX_TEST_DSN='postgres://usuario:contraseña@127.0.0.1:5432/scopeweaver_adapter_e2e?sslmode=disable' \
 go test ./server -run '^TestAgentAdapterE2E$' -count=1 -v
 ```
 
-The test body skips unless `SCOPEWEAVER_ADAPTER_E2E=1`; when enabled, it also skips if `ARTEX_TEST_DSN` is unset or blank. A skipped test is not E2E evidence. The package's database guard rejects a DSN matching the configured live application database before test execution. In an opted-in, configured run, malformed DSNs, database names outside `scopeweaver_adapter_*` and unavailable PostgreSQL fail. The harness never substitutes mocks. GitHub Actions repeats these checks in a dedicated disposable PostgreSQL service. MCP protocol tests establish compatibility with the shared interface; they do not claim a paid Claude/Codex/Pi model session was run.
+La prueba se omite salvo que `SCOPEWEAVER_ADAPTER_E2E=1`; cuando está habilitada, también se omite si `ARTEX_TEST_DSN` no está definida o está vacía. Una prueba omitida no es evidencia E2E. La protección de base de datos del paquete rechaza un DSN que coincida con la base de datos viva configurada de la aplicación antes de ejecutar la prueba. En una ejecución habilitada y configurada, los DSN mal formados, los nombres de base de datos fuera de `scopeweaver_adapter_*` y un PostgreSQL no disponible fallan. La batería nunca sustituye elementos por mocks. GitHub Actions repite estas comprobaciones en un servicio PostgreSQL desechable dedicado. Las pruebas del protocolo MCP establecen compatibilidad con la interfaz compartida; no afirman que se haya ejecutado una sesión de modelo de pago con Claude, Codex o Pi.

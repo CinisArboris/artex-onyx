@@ -1,6 +1,6 @@
 # Puente OpenCode SDK
 
-[English](README.md) · [한국어](README.ko.md) · [简体中文](README.zh-Hans.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [Español](README.es.md)
+Español · [← documentación del proyecto](../../docs/indice.md)
 
 Puente opcional limitado a loopback para **CLI/cliente/SDK nativo de OpenCode 2.3.0** y la pareja **SDK/CLI heredada 1.19.4**, probada por separado. ScopeWeaver conserva la conversación, ejecución de herramientas, aprobaciones, controles de alcance, reintentos y compactación. El puente transmite un solo paso del modelo y captura solicitudes de herramientas; no ejecuta herramientas de ScopeWeaver ni herramientas internas de OpenCode. Los proveedores API y OpenCode Go existentes funcionan sin este puente.
 
@@ -119,4 +119,4 @@ Las pruebas usan la pareja real fijada de CLI/cliente/SDK con modelos SSE locale
 
 Un token vacío conserva el guardado solo para el mismo endpoint SDK. Al cambiar URL o formato no se reutiliza; `localhost`, `127.0.0.1` y `::1` son ámbitos distintos de credenciales. La plantilla SDK borra claves de nube sin guardar, proxy y cabecera de sesión personalizada, deja el modelo vacío y no descubre, infiere, guarda ni activa. Usa **Cargar modelos** de forma explícita; **Probar conexión** solo hace inferencia al pulsarlo.
 
-La restricción `CHECK` de formatos de perfil añade `opencode-sdk`. Los binarios antiguos no arrancan mientras queden perfiles SDK. Antes de degradar, respalda la base de datos y usa la versión actual para convertirlos a un formato antiguo compatible o eliminarlos. La verificación previa de migración usó bases desechables, sin migrar una base de producción. Consulta la [guía de proveedores](../../docs/es/llm-providers.md#opencode-sdk-bridge).
+La restricción `CHECK` de formatos de perfil añade `opencode-sdk`. Los binarios antiguos no arrancan mientras queden perfiles SDK. Antes de degradar, respalda la base de datos y usa la versión actual para convertirlos a un formato antiguo compatible o eliminarlos. La verificación previa de migración usó bases desechables, sin migrar una base de producción. Consulta la [guía de proveedores](../../docs/proveedores/puente-opencode.md).

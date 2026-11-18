@@ -35,7 +35,7 @@ noaadapter/overflow.go, noaadapter/overflow_test.go, noaadapter/tiering_test.go.
 Added files: harness/streaming_context_test.go, noa/smallwindow_defaults_test.go,
 noa/nudge_count_benefit_test.go, README.scopeweaver.md.
 The original license is reproduced below. See third_party/norma/README.scopeweaver.md
-and docs/PROVENANCE.md for source and modification details.
+and docs/procedencia.md for source and modification details.
 
                                  Apache License
                            Version 2.0, January 2004

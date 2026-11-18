@@ -66,8 +66,7 @@ agent/legacy_stock_compat_test.go
 agent/testdata/legacy_add_intent_schemas.json
 agent/testdata/legacy_stock_prompts.json
 agent/tool_stock_schema.go
-docs/VERIFICATION.md
-docs/ko/VERIFICATION.md
+docs/verificacion.md
 locale/zh-Hant.json
 ```
 

@@ -1,6 +1,6 @@
 # Contribuir a ScopeWeaver
 
-[English](CONTRIBUTING.md) · [한국어](CONTRIBUTING.ko.md) · [简体中文](CONTRIBUTING.zh-Hans.md) · [繁體中文](CONTRIBUTING.zh-Hant.md) · [日本語](CONTRIBUTING.ja.md) · Español
+Español
 
 Las contribuciones son bienvenidas: correcciones, adaptaciones de ARTEX original, actualizaciones de dependencias, documentación
 y pruebas.
@@ -14,22 +14,21 @@ y pruebas.
 
 ## Requisitos de una solicitud de cambio
 
-- **Idiomas publicados y documentación completos.** El texto visible y las guías mantenidas de usuarios/colaboradores necesitan inglés, coreano, chino simplificado (`zh-Hans`), chino tradicional (`zh-Hant`), japonés (`ja`) y español (`es`):
-  - mensajes del servidor: conserva la compatibilidad de `locale.Register(key, en, ko)` e incluye los idiomas adicionales mediante `locale.RegisterAll` y los recursos por idioma de `locale/`
-  - interfaz web: todas las claves inglesas actuales en tablas EN/KO y `messages/{zh-hans,zh-hant,ja,es}.ts`
-  - documentación: `README.md`, `CONTRIBUTING.md` y guías mantenidas con ediciones correspondientes `ko`, `zh-Hans`, `zh-Hant`, `ja` y `es`; conserva las entradas ejecutables de habilidades en inglés
+- **Idiomas publicados y documentación completos.** Este fork publica solo español. El texto visible y las guías mantenidas de usuarios/colaboradores necesitan español (`es`), y las entradas ejecutables de habilidades se conservan en inglés porque el binario las lee desde `skills/`:
+  - mensajes del servidor: conserva la compatibilidad de `locale.Register(key, en, ko)`; los recursos por idioma de `locale/` que no sean español o inglés deben permanecer si el runtime ya los registra
+  - interfaz web: todas las claves inglesas actuales en tablas EN/KO y `messages/es.ts`
+  - documentación: `README.es.md`, `CONTRIBUTING.es.md` y las guías mantenidas bajo `docs/` en español; conserva las entradas ejecutables de habilidades en inglés
 - **Pruebas del comportamiento cambiado.** Añade o actualiza pruebas que fallarían sin tu cambio. No
   desactives, omitas ni debilites comprobaciones existentes para que pasen.
 - **Solo bases de datos desechables.** Las pruebas que escriban en PostgreSQL deben usar una base nueva llamada
   `scopeweaver_test_*` (o `scopeweaver_adapter_*` para E2E del adaptador de agentes).
 - **Atribuye el trabajo original.** Para adaptaciones de ARTEX, añade `Upstream-commit: mhtsec/ARTEX@<sha>` y una
-  línea `Co-authored-by:` del autor original, y actualiza `docs/PROVENANCE.md` y
-  `docs/ko/PROVENANCE.md`.
+  línea `Co-authored-by:` del autor original, y actualiza `docs/procedencia.md`.
 - **Licencia.** Las contribuciones se aceptan bajo la licencia [AGPL-3.0](LICENSE) del repositorio.
 
 ## Añadir o cambiar un idioma
 
-Sigue la [guía de idiomas](docs/es/i18n.md): actualiza `locale/definitions.json` compartido
+Sigue la [guía de idiomas](docs/idiomas.md): actualiza `locale/definitions.json` compartido
 (ID canónico, nombre nativo, asignación Intl y alias), vectores de coincidencia, catálogos completos de frontend/backend,
 asignación date-fns, pruebas específicas y prueba básica de navegador. `zh`, `zh-CN` y `zh-SG` corresponden a
 `zh-Hans`; `zh-TW`, `zh-HK` y `zh-MO` a `zh-Hant`. Una escritura explícita prevalece sobre una región contradictoria.
@@ -49,7 +48,7 @@ Coinciden con los trabajos CI de [.github/workflows/ci.yml](.github/workflows/ci
 
 # backend database-backed suites (db, server, agent): against a throwaway database
 # that is created and dropped for you. They require ARTEX_TEST_DSN and skip (never
-# fall back to the live DSN) without it — see docs/VERIFICATION.md.
+# fall back to the live DSN) without it — see docs/verificacion.md.
 make test-db
 
 # backend: every Go package (set ARTEX_TEST_DSN to a disposable scopeweaver_test_* database)

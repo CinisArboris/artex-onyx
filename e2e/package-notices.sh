@@ -16,9 +16,9 @@ cp "$repo/build.sh" "$repo/THIRD_PARTY_NOTICES.txt" "$fixture/"
 mkdir -p "$fixture/bin" "$fixture/server/webui/dist" "$fixture/skills" "$fixture/docs" "$fixture/log" \
   "$fixture/adapters/agent/src" "$fixture/adapters/agent/test" \
   "$fixture/adapters/opencode-sdk/src" "$fixture/adapters/opencode-sdk/test"
-for name in start.sh start.bat config.example.json README.md README.ko.md LICENSE CHANGELOG.md \
+for name in start.sh start.bat config.example.json README.es.md CONTRIBUTING.es.md LICENSE CHANGELOG.md \
   adapters/agent/package.json adapters/agent/package-lock.json adapters/agent/README.md adapters/agent/pi-extension.js \
-  adapters/opencode-sdk/package.json adapters/opencode-sdk/bun.lock \
+  adapters/opencode-sdk/package.json adapters/opencode-sdk/bun.lock adapters/opencode-sdk/README.es.md \
   adapters/opencode-sdk/src/fixture.mjs adapters/opencode-sdk/test/fixture.mjs \
   log/changelog-v0.2.1.md skills/SKILL.md docs/guide.md adapters/agent/src/fixture.js adapters/agent/test/fixture.js; do
   printf 'fixture %s\n' "$name" > "$fixture/$name"
@@ -34,13 +34,15 @@ documents = {Path(name) for name in ("PRODUCT.md", "DESIGN.md", "adapters/agent/
 for directory in ("docs", "skills", "sidequestion"):
     documents.update(path.relative_to(repo) for path in (repo / directory).rglob("*.md"))
 documents.update(path.relative_to(repo) for path in (repo / "web/src/i18n").glob("README*.md"))
+# This fork ships Spanish only: the root README/CONTRIBUTING and the SDK adapter README
+# exist once, not once per locale.
+documents.add(Path("README.es.md"))
+documents.add(Path("CONTRIBUTING.es.md"))
+documents.add(Path("adapters/opencode-sdk/README.es.md"))
 for language in languages:
-    suffix = "" if language == "en" else f".{language}"
-    documents.update(Path(f"{name}{suffix}.md") for name in ("README", "CONTRIBUTING"))
-    documents.add(Path("adapters/opencode-sdk") / f"README{suffix}.md")
     if language != "en":
-        for guide in (repo / "docs/ko").rglob("*.md"):
-            documents.add(Path("docs") / language / guide.relative_to(repo / "docs/ko"))
+        for guide in (repo / "docs").rglob("*.md"):
+            documents.add(guide.relative_to(repo))
 for document in sorted(documents):
     assert (repo / document).is_file(), f"Missing maintained document: {document}"
     target = fixture / document

@@ -1,6 +1,6 @@
 # ScopeWeaver landing — DESIGN.md
 
-English · [한국어](docs/ko/DESIGN.md) · [简体中文](docs/zh-Hans/DESIGN.md) · [繁體中文](docs/zh-Hant/DESIGN.md) · [日本語](docs/ja/DESIGN.md) · [Español](docs/es/DESIGN.md)
+English · [Español](docs/diseno.md)
 
 <!-- impeccable:design-schema 1 -->
 
@@ -73,7 +73,7 @@ Single column of hairline-separated sections, varying density deliberately:
 5. **Requirements** — four hairline cells: PostgreSQL, a separately configured
    model provider, Node.js 22+ for the adapter, a local lab target.
 6. **Limits & credits** — a plain limits list (locally isolated only; the historical inherited scope-overview mismatch fixed in `75a706d`
-   (see [verification](docs/VERIFICATION.md), without a current whole-suite success claim); no production/effectiveness claims; unverified
+   (see [verification](docs/verificacion.md), without a current whole-suite success claim); no production/effectiveness claims; unverified
    Docker/Windows; npm audit findings; adapter tests use local fixtures and
    live coding-agent-to-provider execution is not independently verified, linked
    to VERIFICATION) beside the deidentified

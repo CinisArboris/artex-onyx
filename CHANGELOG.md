@@ -1,6 +1,6 @@
 # Upstream ARTEX changelog
 
-This is the translated upstream ARTEX history from baseline `160fe13`, preserving its original dates, contributors and technical history. These entries are not ScopeWeaver releases. ScopeWeaver's 2026-10-02 modifications are recorded separately in [provenance](docs/PROVENANCE.md). Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). [한국어](CHANGELOG.ko.md).
+This is the translated upstream ARTEX history from baseline `160fe13`, preserving its original dates, contributors and technical history. These entries are not ScopeWeaver releases. ScopeWeaver's 2026-10-02 modifications are recorded separately in [provenance](docs/procedencia.md). Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). [한국어](CHANGELOG.ko.md).
 
 ## [Unreleased]
 

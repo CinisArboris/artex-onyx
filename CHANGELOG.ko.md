@@ -1,6 +1,6 @@
 # 원본 ARTEX 변경 기록
 
-기준 `160fe13`의 원본 ARTEX 변경 기록을 번역했습니다. 원래 날짜, 기여자, 기술 이력을 유지하며 ScopeWeaver 릴리스 기록이 아닙니다. 2026-10-02 ScopeWeaver 변경은 [출처 문서](docs/ko/PROVENANCE.md)에 별도로 기록합니다. 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.1.0/)를 따릅니다. [English](CHANGELOG.md).
+기준 `160fe13`의 원본 ARTEX 변경 기록을 번역했습니다. 원래 날짜, 기여자, 기술 이력을 유지하며 ScopeWeaver 릴리스 기록이 아닙니다. 2026-10-02 ScopeWeaver 변경은 [출처 문서](docs/procedencia.md)에 별도로 기록합니다. 형식은 [Keep a Changelog](https://keepachangelog.com/ko/1.1.0/)를 따릅니다. [English](CHANGELOG.md).
 
 ## [Unreleased]
 

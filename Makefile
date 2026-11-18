@@ -7,6 +7,6 @@
 # scripts/test-db.sh creates and drops. It never touches the live/production
 # database, and refuses to run if ARTEX_TEST_DSN points at the live DB. Override
 # TEST_DB_ROLE / TEST_DB_HOST / TEST_DB_NAME to match your local PostgreSQL.
-# See docs/VERIFICATION.md ("Running database-backed tests").
+# See docs/verificacion.md ("Running database-backed tests").
 test-db:
 	./scripts/test-db.sh

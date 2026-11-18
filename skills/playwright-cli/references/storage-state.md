@@ -1,6 +1,6 @@
 # Storage Management
 
-English · [한국어](../../../docs/ko/skills/playwright-cli/references/storage-state.md) · [简体中文](../../../docs/zh-Hans/skills/playwright-cli/references/storage-state.md) · [繁體中文](../../../docs/zh-Hant/skills/playwright-cli/references/storage-state.md) · [日本語](../../../docs/ja/skills/playwright-cli/references/storage-state.md) · [Español](../../../docs/es/skills/playwright-cli/references/storage-state.md)
+English · [Español](../../../docs/habilidades/playwright-cli/referencias/estado-almacenamiento.md)
 
 Manage cookies, localStorage, sessionStorage, and browser storage state.
 
