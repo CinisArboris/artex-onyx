@@ -1,0 +1,62 @@
+name: Snyk Manual Scan (dev)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  snyk-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout dev branch
+        uses: actions/checkout@v4
+        with:
+          ref: dev
+
+      - name: Setup Go
+        if: hashFiles('go.mod') != ''
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Snyk CLI
+        uses: snyk/actions/setup@master
+
+      - name: Scan Go dependencies (go.mod)
+        if: hashFiles('go.mod') != ''
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk test --file=go.mod
+
+      - name: Scan Node/JS dependencies in subfolders
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          find . -name "package.json" -not -path "*/node_modules/*" -not -path "*/.git/*" | while read -r pkg; do
+            dir=$(dirname "$pkg")
+            echo "=== Scanning $pkg ==="
+            if [ -f "$dir/package-lock.json" ]; then
+              (cd "$dir" && npm ci)
+            else
+              (cd "$dir" && npm install)
+            fi
+            snyk test --file="$pkg" || true
+          done
+
+      - name: Scan Dockerfile & Compose (IaC)
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk iac test Dockerfile docker-compose.yml || true
+
+      - name: Scan full source code (Snyk Code / SAST)
+        continue-on-error: true
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: snyk code test
